@@ -1,4 +1,4 @@
-# 🤖 機器學習效能評估指標：Precision、Recall、F1-score
+# 機器學習效能評估指標：Precision、Recall、F1-score
 
 機器學習模型在分類任務中，需要用多種指標來評估效能，尤其在資料不平衡（imbalanced dataset）時，單看準確率（Accuracy）可能會誤導。
 
