@@ -1,4 +1,4 @@
-# 作業系統簡介（Operating Systems）
+# 4. Operating Systems
 
 作業系統（Operating System, OS）是一種管理電腦硬體與軟體資源的系統軟體，它是應用程式與硬體之間的橋樑。當你使用應用程式時，作業系統會負責處理底層的硬體操作、資源分配與安全保護。
 
