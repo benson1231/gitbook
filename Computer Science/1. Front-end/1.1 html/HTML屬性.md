@@ -1,4 +1,4 @@
-# HTML 常見屬性介紹
+# HTML屬性
 
 HTML 屬性（attributes）用來補充標籤的資訊，控制其外觀、行為與識別方式。以下是常見的 HTML 屬性整理：
 
@@ -46,6 +46,13 @@ HTML 屬性（attributes）用來補充標籤的資訊，控制其外觀、行�
 
 ```html
 <a href="https://example.com">點我</a>
+```
+錨點連結範例（跳至頁面內特定元素）：
+
+```html
+<a href="#section1">跳到 Section 1</a>
+...
+<h2 id="section1">Section 1</h2>
 ```
 
 ### `target`

@@ -1,4 +1,4 @@
-# 基礎 CSS 語法介紹
+# Basic CSS
 
 CSS（Cascading Style Sheets）是用來控制 HTML 元素的樣式表語言。透過 CSS，可以設定顏色、字型、排版、位置與動畫等視覺效果。
 
