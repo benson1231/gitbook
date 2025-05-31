@@ -1,4 +1,4 @@
-## LaTeX 數學語法教學
+## LaTeX
 
 LaTeX 是一種強大的排版語言，常用於撰寫數學與科學文件。在 Markdown 中，許多平台（如 HackMD、Typora、Jupyter Notebook、Obsidian、GitHub Pages 等）支援 LaTeX 數學公式的渲染。
 
