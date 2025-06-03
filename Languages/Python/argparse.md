@@ -1,4 +1,4 @@
-# Python argparse 模組介紹
+# argparse
 
 `argparse` 是 Python 標準函式庫中用來解析命令列參數的模組，可用於構建 CLI（命令列介面）工具，讓使用者能夠在終端機中傳遞參數給 Python 腳本。
 

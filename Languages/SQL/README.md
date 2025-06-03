@@ -1,4 +1,4 @@
-# basic_SQL
+# SQL
 ## 結構式查詢語言 (SQL) 是一種用於在關聯式資料庫中儲存和處理資訊的程式設計語言
 ## [sqliteviz](https://sqliteviz.com/app/#/)
 ## [papaya](https://papayaclassroom.notion.site/SQL-eb3a9ce2c9404f518674d885c5a789a5)
