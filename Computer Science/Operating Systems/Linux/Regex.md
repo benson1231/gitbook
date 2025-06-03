@@ -3,7 +3,8 @@
 Regular expressions (regex) are sequences of characters that define search patterns. They are widely used in text processing, searching, and validation.
 
 **Reference:** [GeekHour youtube video](https://www.youtube.com/watch?v=uPBtum7QRvw)  
-**Practice:** [Regexr](https://regexr.com/)
+**Practice:** [Regexr](https://regexr.com/)  [regex101](https://regex101.com/)
+
 
 ---
 
