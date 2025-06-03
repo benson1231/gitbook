@@ -1,4 +1,4 @@
-# 1.5 React
+# React
 
 React 是由 Meta（前 Facebook）開發的 JavaScript 函式庫，用於建立使用者介面（UI），特別是單頁應用程式（SPA）。它採用元件化設計，使得 UI 可重用、易於維護。
 
