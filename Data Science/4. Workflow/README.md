@@ -1,4 +1,4 @@
-# Workflow Description Languages (WDL) Overview
+# Workflow Description Languages
 
 Workflow Description Languages (WDL) are a key aspect of computational pipelines, allowing researchers to define complex workflows for data analysis in a structured, reproducible, and shareable manner. WDL simplifies bioinformatics pipeline development and is supported by various workflow engines like Nextflow and Snakemake.
 
