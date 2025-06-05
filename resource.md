@@ -5,6 +5,7 @@
 #### 教學網站
 
 * **[Codecademy Docs](https://www.codecademy.com/resources/docs)**：語言與技術文檔集合。
+* **[hello algo](https://www.hello-algo.com/chapter_hello_algo/)**：資料結構與演算法詳細教學，有多種程式語言詮釋。
 * **[W3Schools](https://www.w3schools.com/)**：各種 Web 開發技術入門教學。
 
 ---
@@ -47,7 +48,7 @@
 
 #### Bioinformatics / Genomics
 
-* **[Ensembl](https://www.ensembl.org/)**：基因體資料查詢與註解平台。
+* **[Ensembl](https://www.ensembl.org/)** or **[Ensembl FTP](https://ftp.ensembl.org/pub/)**：基因體資料查詢與註解平台。
 * **[UCSC Genome Browser](https://genome.ucsc.edu/)**：基因體視覺化與查詢工具。
 * **[GDC Portal](https://portal.gdc.cancer.gov/)**：TCGA 資料平台。
 * **[Bioconductor](https://bioconductor.org/)**：R 語言的生物資訊分析套件集合。
