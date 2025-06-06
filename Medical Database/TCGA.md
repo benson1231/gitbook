@@ -36,12 +36,18 @@ TCGA 包含來自超過 30 種癌別、超過 11,000 位病人的資料，其涵
 
 ```r
 library(TCGAbiolinks)
-query <- GDCquery(project = "TCGA-BRCA",
-                  data.category = "Transcriptome Profiling",
-                  data.type = "Gene Expression Quantification",
-                  workflow.type = "HTSeq - Counts")
-GDCdownload(query)
-data <- GDCprepare(query)
+
+# 基因表現資料
+query_exp <- GDCquery(
+  project = "TCGA-LUAD",
+  data.category = "Transcriptome Profiling",
+  data.type = "Gene Expression Quantification",
+)
+GDCdownload(query_exp)
+exp_data <- GDCprepare(query_exp)
+
+# 臨床資料
+clinical_data <- GDCquery_clinic("TCGA-LUAD", "clinical")
 ```
 
 ---
