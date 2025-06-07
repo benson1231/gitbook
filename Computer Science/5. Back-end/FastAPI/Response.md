@@ -1,0 +1,148 @@
+# Response Formats
+
+FastAPI 支援多種回應資料格式與控制方式，可根據情境回傳 JSON、HTML、純文字、串流、檔案、導向等內容，也能客製化 HTTP 狀態碼與標頭。
+
+---
+
+## 1. 預設回應（JSON 格式）
+
+FastAPI 預設會將字典型態資料自動轉換為 JSON：
+
+```python
+from fastapi import FastAPI
+
+app = FastAPI()
+
+@app.get("/json")
+def return_json():
+    return {"message": "這是 JSON 回應"}
+```
+
+---
+
+## 2. 純文字回應（Plain Text）
+
+使用 `PlainTextResponse` 回傳純文字：
+
+```python
+from fastapi.responses import PlainTextResponse
+
+@app.get("/text", response_class=PlainTextResponse)
+def return_text():
+    return "這是純文字內容"
+```
+
+---
+
+## 3. HTML 回應
+
+使用 `HTMLResponse` 可傳送 HTML 結構給前端：
+
+```python
+from fastapi.responses import HTMLResponse
+
+@app.get("/html", response_class=HTMLResponse)
+def return_html():
+    return """
+    <html>
+      <body>
+        <h1>Hello HTML!</h1>
+      </body>
+    </html>
+    """
+```
+
+---
+
+## 4. 自訂狀態碼與標頭
+
+透過 `Response` 或 `JSONResponse` 控制回應狀態與標頭：
+
+```python
+from fastapi.responses import JSONResponse
+
+@app.get("/custom")
+def custom_response():
+    return JSONResponse(content={"ok": True}, status_code=201, headers={"X-App": "FastAPI"})
+```
+
+---
+
+## 5. 回傳檔案（FileResponse）
+
+```python
+from fastapi.responses import FileResponse
+
+@app.get("/download")
+def download_file():
+    return FileResponse("./files/report.pdf", media_type="application/pdf", filename="report.pdf")
+```
+
+---
+
+## 6. 串流資料（StreamingResponse）
+
+使用 `StreamingResponse` 可用於大量或即時輸出資料：
+
+```python
+from fastapi.responses import StreamingResponse
+
+def generate_data():
+    for i in range(5):
+        yield f"資料 {i}\n"
+
+@app.get("/stream")
+def stream_data():
+    return StreamingResponse(generate_data(), media_type="text/plain")
+```
+
+---
+
+## 7. 回應模型（Response Model）
+
+透過 Pydantic 定義輸出結構，限制欄位與資料類型：
+
+```python
+from pydantic import BaseModel
+
+class ItemOut(BaseModel):
+    name: str
+    price: float
+
+@app.get("/item", response_model=ItemOut)
+def get_item():
+    return {"name": "Keyboard", "price": 599.0, "extra": "ignored"}
+```
+
+---
+
+## 8. 導向（RedirectResponse）
+
+使用 `RedirectResponse` 可將請求導向至其他 URL：
+
+```python
+from fastapi.responses import RedirectResponse
+
+@app.get("/go-to-docs")
+def redirect():
+    return RedirectResponse(url="/docs")
+```
+
+此方法常用於導向登入頁面、外部網站或自動轉跳。
+
+---
+
+## 小結
+
+| 回應類型     | 回傳格式          | 使用方式                                              |
+| -------- | ------------- | ------------------------------------------------- |
+| JSON（預設） | `dict`        | 直接 return 字典                                      |
+| 純文字      | `str`         | `response_class=PlainTextResponse`                |
+| HTML     | `html string` | `response_class=HTMLResponse`                     |
+| 檔案下載     | 檔案內容          | `FileResponse(filepath)`                          |
+| 串流       | 產生器輸出         | `StreamingResponse(generator)`                    |
+| 自訂狀態與標頭  | JSON 或其他      | `JSONResponse(..., status_code=..., headers=...)` |
+| 回應模型（驗證） | Pydantic 模型   | `response_model=Model`                            |
+| 導向       | HTTP 302      | `RedirectResponse(url)`                           |
+
+掌握 FastAPI 的各種回應方式，有助於打造符合實際需求的 API 回傳行為，無論是介面整合、前端頁面、檔案服務或大型資料輸出都能靈活應對。

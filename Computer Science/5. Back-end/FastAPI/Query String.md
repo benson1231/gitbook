@@ -1,0 +1,172 @@
+# Query String
+
+查詢字串參數是 URL 中 `?` 後面的鍵值對組合，常用於前端傳遞資料給後端，例如篩選條件、分頁數字或搜尋關鍵字。
+
+---
+
+## 查詢參數格式
+
+基本格式如下：
+
+```
+?key1=value1&key2=value2
+```
+
+範例：
+
+```
+/search?q=fastapi&page=2
+```
+
+代表：搜尋字串為 `fastapi`，頁數為第 2 頁。
+
+---
+
+## FastAPI 中使用查詢參數
+
+使用查詢參數時，不需要在路由中宣告變數，而是直接於函式參數中設定。
+
+```python
+from fastapi import FastAPI
+
+app = FastAPI()
+
+@app.get("/search")
+def search(q: str, page: int = 1):
+    return {"query": q, "page": page}
+```
+
+呼叫：
+
+```
+http://127.0.0.1:8000/search?q=machine+learning&page=3
+```
+
+---
+
+## 預設值與選擇性參數
+
+可以為參數指定預設值，使其變為「非必要參數」。
+
+```python
+@app.get("/products")
+def list_products(category: str = "all"):
+    return {"category": category}
+```
+
+呼叫 `/products` 將回傳 `{"category": "all"}`。
+
+---
+
+## 多參數處理與類型驗證
+
+FastAPI 自動根據型別進行驗證與轉換，例如：
+
+```python
+@app.get("/sum")
+def compute_sum(a: int, b: int):
+    return {"sum": a + b}
+```
+
+呼叫 `/sum?a=10&b=20` → 回傳 `{"sum": 30}`。
+如果輸入 `/sum?a=ten&b=20` 將回傳錯誤。
+
+---
+
+## 使用 Annotated 與 Query 進行進階驗證
+
+FastAPI 提供 `Annotated` 與 `Query` 搭配使用進行更嚴謹的參數限制與描述。
+
+```python
+from fastapi import Query
+from typing import Annotated
+
+@app.get("/books")
+def read_books(
+    keyword: Annotated[str, Query(min_length=3, max_length=20)],
+    limit: Annotated[int, Query(ge=1, le=100)] = 10
+):
+    return {"keyword": keyword, "limit": limit}
+```
+
+說明：
+
+* `min_length`、`max_length`：限制字串長度
+* `ge`（greater or equal）、`le`（less or equal）：數值範圍限制
+* 可搭配 `description="..."` 供自動文件顯示
+
+---
+
+## 路由參數 vs 查詢參數
+
+### 路由參數（Path Parameters）：
+
+定義於 URL 路徑中，必須提供，不可省略。
+
+```python
+@app.get("/users/{user_id}")
+def get_user(user_id: int):
+    return {"user_id": user_id}
+```
+
+呼叫：`/users/123` → `{"user_id": 123}`
+
+---
+
+## 使用 Annotated 與 Path 進行路由參數驗證
+
+```python
+from fastapi import Path
+from typing import Annotated
+
+@app.get("/users/{user_id}")
+def get_user(user_id: Annotated[int, Path(ge=1, le=10000)]):
+    return {"user_id": user_id}
+```
+
+說明：
+
+* `Path(...)` 用於限制路由變數的範圍與型別
+* 常用的條件：`ge`（>=）、`le`（<=）、`description` 等
+
+---
+
+## 查詢參數（Query Parameters）：
+
+定義於 `?` 之後，可選可省略，常用於篩選與條件設定。
+
+```python
+@app.get("/users")
+def search_users(active: bool = True):
+    return {"active": active}
+```
+
+呼叫：`/users?active=false`
+
+---
+
+## 路由參數 + 查詢參數同時使用
+
+```python
+@app.get("/users/{user_id}/orders")
+def user_orders(
+    user_id: Annotated[int, Path(ge=1)],
+    limit: Annotated[int, Query(ge=1, le=50)] = 10
+):
+    return {"user": user_id, "limit": limit}
+```
+
+呼叫：`/users/42/orders?limit=10` → `{"user": 42, "limit": 10}`
+
+---
+
+## 小結
+
+| 類型             | 範例                        | 用途           |
+| -------------- | ------------------------- | ------------ |
+| 路由參數           | `/item/123`               | 對應資源主鍵，必要參數  |
+| 查詢參數           | `/search?q=ai&page=2`     | 選擇性篩選與條件     |
+| 同時使用           | `/user/5/orders?limit=10` | 複合資源 + 額外條件  |
+| `Annotated` 結合 | `Path` / `Query` 進階驗證     | 提供型別、長度、範圍控制 |
+
+查詢參數與路由參數是 Web API 的核心資料傳遞方式，使用 FastAPI 的 `Annotated` 機制可提升程式的清晰度與安全性，適合撰寫可維護性高的服務端程式碼。

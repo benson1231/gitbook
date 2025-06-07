@@ -1,0 +1,105 @@
+# Form
+
+FastAPI 支援透過 `Form` 物件來接收 HTML 表單傳送的資料，常用於登入、註冊、搜尋等功能的前端互動。
+
+---
+
+## 1. 安裝必要套件
+
+若使用模板引擎（如 Jinja2）配合表單顯示，請先安裝：
+
+```bash
+pip install jinja2 aiofiles
+```
+
+---
+
+## 2. 接收表單資料
+
+使用 `Form` 類別可讓 FastAPI 解析來自前端表單的 POST 資料：
+
+```python
+from fastapi import FastAPI, Form
+
+app = FastAPI()
+
+@app.post("/login")
+def login(username: str = Form(...), password: str = Form(...)):
+    return {"username": username, "password": password}
+```
+
+### 說明：
+
+* `Form(...)` 表示此欄位為必填。
+* 表單資料須使用 `application/x-www-form-urlencoded` 送出（HTML form 預設格式）。
+
+---
+
+## 3. HTML 表單範例
+
+```html
+<form action="/login" method="post">
+  <input type="text" name="username" placeholder="使用者名稱">
+  <input type="password" name="password" placeholder="密碼">
+  <button type="submit">登入</button>
+</form>
+```
+
+---
+
+## 4. 配合 HTMLResponse 回傳頁面
+
+```python
+from fastapi.responses import HTMLResponse
+
+@app.get("/form", response_class=HTMLResponse)
+def show_form():
+    return """
+    <html>
+      <body>
+        <form action='/login' method='post'>
+          <input type='text' name='username'>
+          <input type='password' name='password'>
+          <input type='submit' value='Login'>
+        </form>
+      </body>
+    </html>
+    """
+```
+
+---
+
+## 5. 表單 + Jinja2 模板整合（進階）
+
+```python
+from fastapi.templating import Jinja2Templates
+from fastapi.requests import Request
+
+templates = Jinja2Templates(directory="templates")
+
+@app.get("/register")
+def show_register_form(request: Request):
+    return templates.TemplateResponse("register.html", {"request": request})
+```
+
+HTML（templates/register.html）：
+
+```html
+<form action="/register" method="post">
+  <input name="email">
+  <input name="password">
+  <button type="submit">註冊</button>
+</form>
+```
+
+---
+
+## 小結
+
+| 功能      | FastAPI 用法                  |
+| ------- | --------------------------- |
+| 接收表單    | 使用 `Form(...)` 作為函式參數       |
+| HTML 表單 | `<form method='post'>`      |
+| 模板整合    | 搭配 `Jinja2Templates` 回傳表單畫面 |
+
+表單處理是建立互動式網站不可或缺的一環，FastAPI 提供簡潔又直觀的方式來接收與處理前端送出的表單資料。

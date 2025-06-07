@@ -1,0 +1,124 @@
+# Connecting Methods
+
+FastAPI 提供多種方式與前端、外部 API、資料庫及第三方服務建立連線。以下為常見的連線情境與實作方式：
+
+---
+
+## 1. 前端表單與瀏覽器請求（HTML Form / AJAX）
+
+### (1) 使用表單傳送 POST 請求：
+
+```html
+<form method="post" action="/submit">
+  <input type="text" name="data">
+  <button type="submit">送出</button>
+</form>
+```
+
+```python
+from fastapi import FastAPI, Form
+
+app = FastAPI()
+
+@app.post("/submit")
+def submit(data: str = Form(...)):
+    return {"data": data}
+```
+
+### (2) 使用 Fetch 發送 JSON：
+
+```js
+fetch("/api", {
+  method: "POST",
+  headers: {"Content-Type": "application/json"},
+  body: JSON.stringify({ key: "value" })
+});
+```
+
+```python
+from pydantic import BaseModel
+
+class Payload(BaseModel):
+    key: str
+
+@app.post("/api")
+def receive(payload: Payload):
+    return payload
+```
+
+---
+
+## 2. 前端 GET 請求（URL/查詢字串）
+
+```html
+<a href="/search?q=fastapi">搜尋</a>
+```
+
+```python
+@app.get("/search")
+def search(q: str):
+    return {"query": q}
+```
+
+---
+
+## 3. 與資料庫連線（SQLAlchemy）
+
+```bash
+pip install sqlalchemy databases asyncpg
+```
+
+```python
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+
+SQLALCHEMY_DATABASE_URL = "postgresql+asyncpg://user:pass@localhost/dbname"
+engine = create_engine(SQLALCHEMY_DATABASE_URL, echo=True)
+SessionLocal = sessionmaker(bind=engine)
+```
+
+---
+
+## 4. 呼叫外部 API（requests / httpx）
+
+```bash
+pip install httpx
+```
+
+```python
+import httpx
+
+@app.get("/external")
+def external():
+    response = httpx.get("https://api.example.com/data")
+    return response.json()
+```
+
+---
+
+## 5. WebSocket 連線（即時通訊）
+
+```python
+from fastapi import WebSocket
+
+@app.websocket("/ws")
+async def websocket_endpoint(websocket: WebSocket):
+    await websocket.accept()
+    data = await websocket.receive_text()
+    await websocket.send_text(f"收到: {data}")
+```
+
+---
+
+## 小結
+
+| 類型        | 技術 / 套件                   | 說明               |
+| --------- | ------------------------- | ---------------- |
+| 表單 / HTML | `Form`, `HTMLResponse`    | 接收瀏覽器提交的表單資料     |
+| JSON API  | `pydantic.BaseModel`      | JSON 請求體驗證與解析    |
+| 查詢 / 路由參數 | `Query`, `Path`           | 處理 URL 上的 GET 請求 |
+| 資料庫連線     | `SQLAlchemy`, `databases` | 持久化資料儲存          |
+| 外部 API 呼叫 | `httpx`, `requests`       | 呼叫第三方 Web API    |
+| WebSocket | `WebSocket`               | 即時雙向通訊           |
+
+掌握這些連線方式後，能讓 FastAPI 與內外部系統有效整合，從簡單表單到 WebSocket 即時資料交換都可涵蓋。
