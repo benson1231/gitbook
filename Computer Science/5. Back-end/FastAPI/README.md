@@ -1,12 +1,14 @@
 # FastAPI
 
-FastAPI 是一個現代化、快速（高效能）的 Python Web 框架，專為建立 RESTful API 而設計，支援自動生成文件（Swagger UI），並能與 Pydantic 進行型別驗證整合。
+**last update: 2025-06-07**
+
+FastAPI 是一個現代化、快速（高效能）的 Python Web 框架，專為建立 RESTful API 而設計，支援自動生成文件（Swagger UI），並能進行型別驗證整合。
 
 ---
 
 ## 安裝 FastAPI 與伺服器
 
-使用 pip 安裝 FastAPI 及 ASGI 伺服器 uvicorn：
+使用 pip 安裝 `FastAPI` 及 ASGI 伺服器 `uvicorn`：
 
 ```bash
 pip install fastapi
@@ -27,19 +29,13 @@ app = FastAPI()
 @app.get("/")
 def index():
     return {"message": "Hello World", "year": 2025}
-
-@app.get("/data")
-def getData(q: int, p: int):
-    return {"Q * 2": q * 2, "P * 2": p * 2}
 ```
-
-> 注意：為確保輸入正確轉換為整數，建議在函數參數中加上型別註記 `q: int`、`p: int`。
 
 ---
 
 ## 啟動伺服器
 
-使用 uvicorn 啟動 FastAPI 應用：
+使用 `uvicorn` 啟動 FastAPI 應用：
 
 ```bash
 uvicorn main:app --reload
@@ -65,4 +61,4 @@ uvicorn main:app --reload --port 3000
 
 ## 結語
 
-FastAPI 是目前最受歡迎的 Python API 框架之一，具備簡潔語法、強型別驗證與自動文件支援，適合快速開發現代 Web API。
+`FastAPI` 是目前最受歡迎的 Python API 框架之一，具備簡潔語法、強型別驗證與自動文件支援，適合快速開發現代 Web API。

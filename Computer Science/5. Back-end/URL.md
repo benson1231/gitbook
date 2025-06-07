@@ -1,6 +1,8 @@
-# URL
+# Uniform Resource Locator (URL)
 
-網址（URL, Uniform Resource Locator）是用來定位網路資源的標準格式。它包含多個部分，每個部分都有特定功能與意義。
+**last update: 2025-06-07**
+
+`網址 (URL, Uniform Resource Locator)`是用來定位網路資源的標準格式。它包含多個部分，每個部分都有特定功能與意義。
 
 ---
 
