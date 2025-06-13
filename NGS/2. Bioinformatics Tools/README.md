@@ -1,4 +1,4 @@
-# Bioinformatics Tools for NGS（次世代定序生物資訊工具）
+# Bioinformatics Tools for NGS
 
 次世代定序（Next-Generation Sequencing, NGS）產生大量高通量序列資料，需依賴一系列生物資訊工具進行前處理、比對、變異分析與功能註解。以下介紹常見工具及其應用階段。
 
