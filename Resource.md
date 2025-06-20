@@ -1,5 +1,9 @@
 # Online Resources
 
+以下整理許多實用的網站，供參考！
+另外有整理電腦科學(CS)相關的實用套件與工具連結如下：
+[生資與電腦科學常用套件整理雲端連結](https://docs.google.com/spreadsheets/d/19aNU64J1diFTT1soe4DDKa7pmG6O8MxQDxvi2kQzsTI/edit?usp=sharing)
+
 ---
 
 #### 教學網站
