@@ -2,5 +2,5 @@ site_name: My Documentation
 theme:
   name: readthedocs
 nav:
-  - Home: index.md
+  - Home: README.md
 docs_dir: .
