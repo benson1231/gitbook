@@ -1,6 +1,7 @@
 # Git Cheat Sheet
 
-**Reference:** [GeekHour youtube video](https://www.youtube.com/watch?v=PN1k1CLXtlw&t=5s)  
+**Reference:** [GeekHour youtube video](https://www.youtube.com/watch?v=PN1k1CLXtlw&t=5s) 
+**Get repo cover image** https://opengraph.githubassets.com/1/{username}/{repository}
 
 ## 1. Basic Git Settings
 
