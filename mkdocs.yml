@@ -1,0 +1,6 @@
+site_name: My Documentation
+theme:
+  name: readthedocs
+nav:
+  - Home: README.md
+  - Introduction: README.md
