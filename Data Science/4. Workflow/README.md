@@ -136,3 +136,6 @@ rule all:
 ---
 
 This markdown provides a comprehensive overview of WDL along with its comparison to Nextflow and Snakemake, helping users choose the best tool for their bioinformatics workflows.
+
+
+

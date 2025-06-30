@@ -1,6 +1,6 @@
 ## 使用 Channel 處理 CSV 檔案
 
-在 Nextflow 中，可以透過 `Channel.fromPath` 搭配 `splitCsv()` 與 `map` 方法來讀取與處理 `.csv` 檔案內容。
+在 Nextflow 中，可以通過 `Channel.fromPath` 搭配 `splitCsv()` 與 `map` 方法來讀取與處理 `.csv` 檔案內容。
 
 ---
 

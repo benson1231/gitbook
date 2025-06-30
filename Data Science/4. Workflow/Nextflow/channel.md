@@ -1,129 +1,272 @@
-## Nextflow `channel` 使用說明
+## Nextflow `Channel` 使用說明
 
-在 Nextflow 中，`Channel` 是資料傳遞的核心機制。流程之間的資料流通都是透過 Channel 來實現的。
+在 Nextflow 中，`Channel` 是流程資料傳遞的核心。不同的 `process` 間透過 Channel 傳遞資料，以實現資料驅動的執行邏輯。
 
 ---
 
 ### 🔹 建立 Channel
 
-**1. 從檔案建立：**
+#### 1. `fromPath`
+
+從路徑建立檔案輸入通道。
 
 ```groovy
 Channel.fromPath('data/*.fastq')
 ```
 
-**2. 從清單建立：**
+* **支援 glob 樣式**：如 `*.fq.gz`
+* **傳出型別**：`path` 資料
+
+#### 2. `from`
+
+從 Iterable（如 List）建立通道。
 
 ```groovy
-Channel.from(['sample1', 'sample2', 'sample3'])
+Channel.from(['sample1', 'sample2'])
 ```
 
-**3. 使用 `Channel.of()` 明確建立：**
+* **多元素**：每個元素單獨 emit
+* 可用於 `List`、`Set`、`Map` 等
+
+#### 3. `of`
+
+與 `from` 相同，但語法更簡潔。
 
 ```groovy
 Channel.of('a', 'b', 'c')
 ```
 
-* `of` 是 `from` 的別名，效果相同但語義更簡潔。
-* 適用於明確列出靜態元素。
+* **立即指定多值**：可當作靜態輸入
 
-**4. 空 Channel（供動態填入）：**
+#### 4. `value`
+
+建立只包含一個資料項的通道。
+
+```groovy
+Channel.value('only_one')
+```
+
+* 與 `of('only_one')` 類似，但語義明確表示僅一值
+
+#### 5. `empty`
+
+建立空 Channel，預留用於後續 `.emit()` 動態填入。
 
 ```groovy
 Channel.empty()
 ```
 
----
+#### 6. `fromFilePairs`
 
-### 🔹 Channel 操作
-
-**1. `map`：轉換資料內容**
+建立成對檔案的資料流，常用於 R1/R2 成對資料。
 
 ```groovy
-ch_names = Channel.from(['file1', 'file2']).map { it.toUpperCase() }
+Channel.fromFilePairs('data/*_{R1,R2}.fastq.gz')
 ```
 
-**2. `filter`：篩選資料**
+* 輸出為 `tuple(id, [file1, file2])`
+* 常搭配 `input: tuple val(id), path(reads)`
 
-```groovy
-ch_filtered = ch_files.filter { it.endsWith('.fastq') }
-```
+#### 7. `fromPath(..., type: 'file')`
 
-**3. `set` / `tuple`：建立複合資料流**
-
-```groovy
-Channel.of('sample1', 'sample2')
-      .set { sample_ch }
-
-Channel.fromPath('*.fq').map { file -> tuple(file.baseName, file) }
-```
-
-**4. `view`：查看 Channel 資料（除錯用）**
-
-```groovy
-my_channel.view()
-```
-
-* 可用於印出 Channel 中的資料內容。
-* 也可傳入自定格式：
-
-```groovy
-my_channel.view { "Sample: $it" }
-```
-
-**5. `flatten`：攤平巢狀資料**
-
-```groovy
-Channel.of(['a', 'b'], ['c', 'd']).flatten().view()
-```
-
-* 將多層 list 展平成單一資料流：
-
-  * 輸入：`[['a','b'],['c','d']]`
-  * 輸出：`'a','b','c','d'`
+指定輸出為檔案（`file`）、目錄（`dir`）或混合。
 
 ---
 
-### 🔹 與 Process 的互動
+### 🔹 Channel 操作方法
 
-**輸入：**
+#### `map`
 
-```groovy
-process align {
-  input:
-  tuple val(id), path(reads)
-
-  script:
-  """
-  echo Processing $id with $reads
-  """
-}
-```
-
-**輸出：**
+對通道內的每筆資料做轉換處理。
 
 ```groovy
-output:
-  path "*.bam" into bam_files
+Channel.from(['a','b']).map { it.toUpperCase() }
 ```
 
----
+* 轉換值、加前綴/後綴、解析欄位等
 
-### 🔹 合併與展開
+#### `filter`
 
-**合併多個 Channel：**
+根據條件篩選通道資料。
+
+```groovy
+ch.filter { it.endsWith('.fastq') }
+```
+
+#### `flatten`
+
+將嵌套 List 攤平為一層元素。
+
+```groovy
+Channel.of(['a', 'b'], ['c', 'd']).flatten()
+```
+
+* 輸入：`[['a','b'],['c','d']]`
+* 輸出：`'a','b','c','d'`
+
+#### `collect`
+
+展開 tuple 結構供處理使用。
+
+```groovy
+ch.map { id, file -> "$id-processed" }
+```
+
+#### `set`
+
+命名一個通道變數（DSL2 常用）。
+
+```groovy
+Channel.of('s1','s2').set { sample_ch }
+```
+
+#### `view`
+
+除錯時顯示 channel 資料。
+
+```groovy
+my_ch.view()
+my_ch.view { "Sample: $it" }
+```
+
+#### `merge`
+
+合併多個 Channel 成一個。
 
 ```groovy
 Channel.merge(ch1, ch2)
 ```
 
-**展開 tuple（`.collect()`）：**
+* **注意順序與資料型別一致性**
+
+#### `mix`
+
+交錯合併多個 Channel 的元素（較少用）。
 
 ```groovy
-ch_input.map { id, file -> "${id}_new" }
+Channel.mix(ch1, ch2)
 ```
+
+#### `combine`
+
+兩個 channel 進行笛卡兒積組合。
+
+```groovy
+ch1.combine(ch2)
+```
+
+* 例如：`ch1 = [A,B], ch2 = [1,2]` → 輸出 `(A,1), (A,2), (B,1), (B,2)`
+
+#### `ifEmpty`
+
+為空時指定替代資料。
+
+```groovy
+ch.ifEmpty { Channel.of('default') }
+```
+
+#### `branch`
+
+依據條件將資料分流。
+
+```groovy
+ch.branch {
+  left: { it.startsWith('A') },
+  right: { it.startsWith('B') }
+}
+```
+
+* 回傳 `Map<String, Channel>`
+
+#### `splitCsv`
+
+將 CSV 逐列讀入並分欄成 tuple。
+
+```groovy
+Channel.fromPath('meta.csv').splitCsv(header:true)
+```
+
+* 搭配 `map` 可轉為 `(sample_id, file_path)`
+
+#### `groupTuple`
+
+將 tuple 通道依 key 分組。
+
+```groovy
+ch.groupTuple()
+```
+
+* 輸入：`(id, value)` → 輸出：`(id, [value1, value2, ...])`
+
+#### `toList`
+
+將所有 channel 內容收集成一個 list（結束時 emit）。
+
+```groovy
+ch.toList().view()
+```
+
+* 常見於 summary 或統計用途
 
 ---
 
-`Channel` 是 Nextflow 的資料流基礎，可靈活操作以支援平行處理、條件分支與動態輸入。
-若搭配 `emit:` 與 `into:` 可進一步模組化流程與改善可讀性。
+### 🔹 與 Process 的互動
+
+#### ➤ 作為輸入
+
+```groovy
+process align {
+  input:
+    tuple val(sample), path(reads)
+
+  script:
+    """
+    echo Aligning $sample with $reads
+    """
+}
+```
+
+#### ➤ 作為輸出
+
+```groovy
+output:
+  path '*.bam' into bam_ch
+```
+
+* 可配合 `into:` 將輸出導入下游 channel
+
+---
+
+### 🔹 實用技巧與補充
+
+* `first()`：取得通道的第一筆資料（常用於 summary）
+* `subscribe {}`：在腳本中以 callback 形式處理 channel 資料（偏 Groovy）
+* `Channel.empty()` 搭配 `.emit:` 可用於流程動態建立輸出
+* `Channel.fromPath().splitCsv()`：適用元資料處理
+* `channel.toList()`：彙總輸出後統一處理（如 all BAM file）
+* `channel.contains()`：在 workflow 中檢查是否包含某值
+
+---
+
+### 📌 小結
+
+| 方法                | 說明                 |
+| ----------------- | ------------------ |
+| `fromPath()`      | 從檔案路徑建立通道          |
+| `from()` / `of()` | 從 List 等集合建立資料流    |
+| `value()`         | 建立只包含一個項目的通道       |
+| `empty()`         | 建立空通道              |
+| `map()`           | 資料轉換               |
+| `filter()`        | 條件過濾               |
+| `flatten()`       | 攤平成單層資料            |
+| `view()`          | 印出資料流內容供除錯         |
+| `merge()`         | 多通道合併為一            |
+| `combine()`       | 兩通道資料配對組合（笛卡兒積）    |
+| `ifEmpty()`       | 空通道給預設值            |
+| `branch()`        | 分流到多通道             |
+| `set()`           | 命名通道變數（DSL2）       |
+| `splitCsv()`      | 讀取並解析 CSV 為欄位      |
+| `groupTuple()`    | 將 tuple 通道依 key 分組 |
+| `toList()`        | 將資料收集成 list 統一輸出   |
+
+Nextflow 的 Channel 設計高度彈性，是串接、平行化流程的基石，學會各種建立與操作方法能大幅提高 pipeline 的模組化與擴充性。
