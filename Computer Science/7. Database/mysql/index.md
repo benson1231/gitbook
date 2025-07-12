@@ -22,7 +22,7 @@
 
 ### 索引的資料結構：B-Tree
 
-MySQL 中大部分的索引（例如 InnoDB 的 PRIMARY、UNIQUE 與一般 INDEX）預設使用 B-Tree 結構。
+MySQL 中大部分的索引預設使用 B-Tree 結構。
 
 * **B-Tree（Balanced Tree）**：適用於範圍查詢（例如 `BETWEEN`、`>`, `<`）與排序操作。
 * **Hash Index**：主要由 Memory 引擎支援，僅適合等值查詢（不支援範圍查詢）。
