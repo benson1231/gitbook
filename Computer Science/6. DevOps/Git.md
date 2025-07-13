@@ -118,11 +118,27 @@ git branch -M main             # Rename the branch to 'main'
 ```
 
 ### Switch Branches
+
+建議使用 `git switch` 指令，這是較新且語意更清晰的分支切換方式（自 Git 2.23 起支援）。
+
 ```bash
-git checkout -b BRANCH_NAME    # Create and switch to a branch
-git checkout main              # Switch to 'main' branch
-git checkout HEAD FILE_NAME    # Restore a file from the current branch
+# 建立並切換到新分支
+git switch -c BRANCH_NAME
+
+# 切換到已存在的分支
+git switch main
+
+# 還原目前分支的特定檔案
+git restore FILE_NAME
 ```
+
+### 備註：
+
+* `git switch` 是專門為切換分支設計的命令，與 `git checkout` 相比語意更明確。
+* `git restore` 可取代 `git checkout HEAD FILE` 的用途，用於還原檔案內容。
+
+若你使用的是 Git 2.23 以下的版本，則仍須使用 `git checkout`。
+
 
 ### Merge Branches
 ```bash
