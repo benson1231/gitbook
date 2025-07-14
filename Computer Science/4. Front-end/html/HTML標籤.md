@@ -122,7 +122,30 @@ HTML 文件的根元素，包裹整個 HTML 頁面。
 <p>請<strong>立刻</strong>回覆！</p>
 ```
 
-這些是建立 HTML 頁面時最常用的基本標籤。掌握它們能夠開始製作結構清晰的網頁。
+## 12. 表格 `<table>`、`<tr>`、`<th>`、`<td>`
+
+用來呈現結構化資料。
+
+```html
+<table border="1">
+  <thead>
+    <tr>
+      <th>姓名</th>
+      <th>年齡</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>小明</td>
+      <td>18</td>
+    </tr>
+    <tr>
+      <td>小華</td>
+      <td>20</td>
+    </tr>
+  </tbody>
+</table>
+```
 
 ---
 
@@ -178,7 +201,12 @@ HTML 文件的根元素，包裹整個 HTML 頁面。
 以下是一個實際應用這些標籤與屬性的範例清單，可作為頁面內導覽：
 
 ```html
+<ol>
   <li><a href="#top">Top</a></li>
   <li><a href="#bottom">Bottom</a></li>
 </ol>
 ```
+
+---
+
+掌握這些 HTML 標籤是建立現代網頁的第一步，搭配 CSS 與 JavaScript 可以創造互動性與視覺豐富的網站。
