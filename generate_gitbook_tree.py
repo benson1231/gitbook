@@ -1,10 +1,10 @@
 import os
 
-def generate_summary_md(root_dir, base_path=".", level=0):
+def generate_tree_md(root_dir, base_path=".", level=0):
     output = ""
     indent = "  " * level
 
-    # List all entries excluding hidden ones (starting with ".")
+    # 忽略以 "." 開頭的檔案或資料夾
     entries = sorted([
         entry for entry in os.listdir(root_dir)
         if not entry.startswith(".")
@@ -12,28 +12,24 @@ def generate_summary_md(root_dir, base_path=".", level=0):
 
     for entry in entries:
         full_path = os.path.join(root_dir, entry)
-        # Normalize path and make it relative (use forward slashes)
         rel_path = os.path.relpath(full_path, base_path).replace("\\", "/")
 
         if os.path.isdir(full_path):
-            # Link to the folder's README.md
-            output += f"{indent}- [{entry}]({rel_path}/README.md)\n"
-            # Recursively process subdirectories
-            output += generate_summary_md(full_path, base_path, level + 1)
+            output += f"{indent}- 📁 [{entry}]({rel_path}/README.md)\n"
+            output += generate_tree_md(full_path, base_path, level + 1)
         else:
-            # Add Markdown file to summary (excluding README.md itself)
             if entry.endswith(".md") and entry.lower() != "readme.md":
-                output += f"{indent}- [{entry}]({rel_path})\n"
+                output += f"{indent}- 📄 [{entry}]({rel_path})\n"
     return output
 
-# 🔧 Set the root directory of your GitBook content
-root_directory = "./"  # Change this to your content folder if needed
+# 🔧 指定你的 GitBook 根目錄
+root_directory = "./"  # 例如 "./content" 或 "./src"
 
-# Generate the content for SUMMARY.md
-summary_markdown = "# Summary\n\n" + generate_summary_md(root_directory, base_path=root_directory)
+tree_markdown = generate_tree_md(root_directory, base_path=root_directory)
 
-# Write the result to a file
-with open("SUMMARY.md", "w", encoding="utf-8") as f:
-    f.write(summary_markdown)
+# 輸出結果存成 markdown
+with open("gitbook_tree.md", "w", encoding="utf-8") as f:
+    f.write("# 📚 GitBook 導覽目錄\n\n")
+    f.write(tree_markdown)
 
-print("✅ SUMMARY.md has been generated successfully.")
+print("✅ 已產生 gitbook_tree.md")
