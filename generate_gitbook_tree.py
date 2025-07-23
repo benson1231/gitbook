@@ -4,7 +4,7 @@ def generate_tree_md(root_dir, base_path=".", level=0):
     output = ""
     indent = "  " * level
 
-    # 忽略以 "." 開頭的檔案或資料夾
+    # Ignore files or directories starting with "."
     entries = sorted([
         entry for entry in os.listdir(root_dir)
         if not entry.startswith(".")
@@ -22,14 +22,15 @@ def generate_tree_md(root_dir, base_path=".", level=0):
                 output += f"{indent}- 📄 [{entry}]({rel_path})\n"
     return output
 
-# 🔧 指定你的 GitBook 根目錄
-root_directory = "./"  # 例如 "./content" 或 "./src"
+# 🔧 Set the root directory of your GitBook
+root_directory = "./"  # e.g., "./content" or "./src"
 
+# Generate the directory tree in Markdown format
 tree_markdown = generate_tree_md(root_directory, base_path=root_directory)
 
-# 輸出結果存成 markdown
+# Write output to a markdown file
 with open("gitbook_tree.md", "w", encoding="utf-8") as f:
-    f.write("# 📚 GitBook 導覽目錄\n\n")
+    f.write("# 📚 GitBook Navigation Tree\n\n")
     f.write(tree_markdown)
 
-print("✅ 已產生 gitbook_tree.md")
+print("✅ gitbook_tree.md has been generated.")
