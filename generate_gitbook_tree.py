@@ -30,7 +30,7 @@ tree_markdown = generate_tree_md(root_directory, base_path=root_directory)
 
 # Write output to a markdown file
 with open("gitbook_tree.md", "w", encoding="utf-8") as f:
-    f.write("# 📚 GitBook Navigation Tree\n\n")
+    f.write("# 📚 目錄\n\n")
     f.write(tree_markdown)
 
 print("✅ gitbook_tree.md has been generated.")
