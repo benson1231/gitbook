@@ -2,6 +2,7 @@
 
 **Reference:** [GeekHour youtube video](https://www.youtube.com/watch?v=PN1k1CLXtlw&t=5s) 
 **Get repo cover image** https://opengraph.githubassets.com/1/{username}/{repository}
+**Get code online** https://raw.githubusercontent.com/benson1231/{repo-name}/{file-name}
 
 ## 1. Basic Git Settings
 
