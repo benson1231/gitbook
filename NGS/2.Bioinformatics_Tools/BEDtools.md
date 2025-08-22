@@ -1,6 +1,6 @@
-# BEDtools 使用速查表
+# bedtools 使用速查表
 
-**更新日期**: 2025.6.2
+**更新日期**: 2025.8.22
 **參考來源**: [BEDtools GitHub](https://github.com/arq5x/bedtools2)
 
 ---
