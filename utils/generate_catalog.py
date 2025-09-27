@@ -1,7 +1,7 @@
 import os
 import argparse
 
-def generate_tree_md(root_dir, base_path=".", level=0):
+def generate_catalog(root_dir, base_path=".", level=0):
     output = ""
     indent = "  " * level
 
@@ -17,7 +17,7 @@ def generate_tree_md(root_dir, base_path=".", level=0):
 
         if os.path.isdir(full_path):
             output += f"{indent}- 📁 [{entry}]({rel_path}/README.md)\n"
-            output += generate_tree_md(full_path, base_path, level + 1)
+            output += generate_catalog(full_path, base_path, level + 1)
         else:
             if entry.endswith(".md") and entry.lower() != "readme.md":
                 output += f"{indent}- 📄 [{entry}]({rel_path})\n"
@@ -26,7 +26,7 @@ def generate_tree_md(root_dir, base_path=".", level=0):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="📚 Generate a GitBook-style directory tree in Markdown."
+        description="📚 Generate a GitBook Catalog in Markdown."
     )
     parser.add_argument(
         "root_directory",
@@ -34,13 +34,13 @@ def main():
     )
     parser.add_argument(
         "-o", "--output",
-        default="gitbook_tree.md",
-        help="Output markdown file (default: gitbook_tree.md)"
+        default="catalog.md",
+        help="Output markdown file (default: catalog.md)"
     )
     args = parser.parse_args()
 
     # Generate tree
-    tree_markdown = generate_tree_md(args.root_directory, base_path=args.root_directory)
+    tree_markdown = generate_catalog(args.root_directory, base_path=args.root_directory)
 
     # Write to file
     with open(args.output, "w", encoding="utf-8") as f:
