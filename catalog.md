@@ -65,6 +65,8 @@
   - 📁 [6.DevOps](ComputerScience/6.DevOps/README.md)
     - 📄 [Conventional_Commits.md](ComputerScience/6.DevOps/Conventional_Commits.md)
     - 📄 [Docker.md](ComputerScience/6.DevOps/Docker.md)
+    - 📄 [DockerCompose.md](ComputerScience/6.DevOps/DockerCompose.md)
+    - 📄 [Dockerfile.md](ComputerScience/6.DevOps/Dockerfile.md)
     - 📄 [Git.md](ComputerScience/6.DevOps/Git.md)
     - 📄 [Read_the_Docs.md](ComputerScience/6.DevOps/Read_the_Docs.md)
     - 📄 [gitflow_model.md](ComputerScience/6.DevOps/gitflow_model.md)
