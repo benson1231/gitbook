@@ -1,67 +1,59 @@
 # DADA2
 
-DADA2（Divisive Amplicon Denoising Algorithm）是一套用於 16S rRNA 與其他擴增子定序資料的錯誤修正與序列推斷工具，核心理念是：
+**DADA2 (Divisive Amplicon Denoising Algorithm 2)** 是一套專為 16S rRNA 與其他擴增子定序設計的錯誤修正與序列推斷工具。其核心理念為：
 
-> 「不依賴參考資料庫，透過建模錯誤機率，直接從定序資料中推斷真實存在的變異序列（ASV）」
-
-DADA2 最大特色是能辨識到單一鹼基變異（single nucleotide resolution），產出精確的 Amplicon Sequence Variants（ASVs），而非粗略的 OTU 聚類。
+> 直接建模定序錯誤機率，從原始 reads 中推斷真實存在的變異序列（ASVs, Amplicon Sequence Variants），而非依靠傳統聚類產生 OTUs。
 
 ---
 
-### 🔬 DADA2 核心演算法流程
+## 🔬 核心流程
 
-1. **品質過濾與截尾（filterAndTrim）**
+1. **品質過濾與裁剪 (filterAndTrim)**  
+   - 移除低品質 reads，截斷低品質尾端，去除非生物學序列 (primers/adapters)。
 
-   * 去除低品質 reads、裁剪 primers/adapters。
+2. **學習錯誤模型 (learnErrors)**  
+   - 建立鹼基錯誤率矩陣，捕捉平台特異的錯誤模式。
 
-2. **學習錯誤模型（learnErrors）**
+3. **去噪 (dada)**  
+   - 應用錯誤模型，區分真實變異與錯誤產生的假變異。
 
-   * 根據輸入資料計算不同鹼基在不同位置上的誤讀機率，建立錯誤矩陣。
+4. **配對合併 (mergePairs)**  
+   - 將正反向 reads 對齊合併，保留一致序列，提升覆蓋長度與準確度。
 
-3. **去噪（dada）**
+5. **去除嵌合體 (removeBimeraDenovo)**  
+   - 移除 PCR 擴增過程形成的假序列。
 
-   * 利用錯誤模型推斷每條讀段是否為真實序列或為錯誤產物。
+6. **建立 ASV 表 (makeSequenceTable)**  
+   - 生成樣本 × ASV 的 abundance 矩陣。
 
-4. **配對合併（mergePairs）**
-
-   * 將 forward 與 reverse reads 對齊合併，並去除不一致區段。
-
-5. **去除嵌合體（removeBimeraDenovo）**
-
-   * 偵測並移除因 PCR 錯配造成的嵌合序列。
-
-6. **建立 ASV 表（makeSequenceTable）**
-
-   * 得到樣本 x ASV 的 abundance 矩陣。
-
-7. **分類註解（assignTaxonomy）**
-
-   * 使用參考資料庫（如 SILVA）比對每條 ASV，取得分類資訊。
+7. **分類註解 (assignTaxonomy / addSpecies)**  
+   - 透過參考資料庫 (如 SILVA、RDP) 對 ASVs 進行分類標註。
 
 ---
 
-### ✅ DADA2 相較傳統 OTU 聚類的優勢
+## ✅ DADA2 相較 OTU 的優勢
 
-| 面向       | OTU 方法     | DADA2 / ASV 方法 |
-| -------- | ---------- | -------------- |
-| 分群原則     | 序列相似度 ≥97% | 單一鹼基解析度        |
-| 是否依賴參考序列 | 是/否皆可      | 不需要（只在註解階段才需）  |
-| 可重現性     | 不穩定（依聚類參數） | 高（序列為唯一單位）     |
-| 結果解釋力    | 低（混合菌群）    | 高（可精確追蹤變異）     |
-
----
-
-## 🧬 DADA2 實際應用於 16S rRNA 分析
-
-參見[DADA技術文件](https://benjjneb.github.io/dada2/index.html)
-
-### 最終可得到：
-
-* `seqtab.nochim`：ASV abundance 表格（樣本 × 序列）
-* `taxa`：每個 ASV 對應的分類名稱（Kingdom → Genus）
-
-這些結果可輸入至 `phyloseq` 進行後續多樣性分析、可視化、統計比較等。
+| 面向       | OTU 方法 (97% 相似度) | DADA2 / ASV 方法 |
+|------------|--------------------|------------------|
+| **解析度**   | 近似群體，無法區分單一鹼基差異 | 單一鹼基解析度 (更精確) |
+| **依賴參考** | 可依賴或不依賴           | 僅在註解階段依賴 |
+| **重現性**   | 聚類參數影響大，不穩定       | 高度可重現 (ASV 為唯一單位) |
+| **生物學解釋** | 低 (混合菌群)             | 高，可追蹤特定變異 |
 
 ---
 
-接下來請參考本文件其他章節來進行 ASV 表與分類結果的多樣性分析與視覺化。
+## 🧬 輸出成果
+
+- `seqtab.nochim`：ASV abundance 表格 (樣本 × ASV)
+- `taxa`：ASV 對應的分類階層 (Kingdom → Genus/Species)
+
+這些結果可直接匯入 **phyloseq** 進行：
+- α 多樣性與 β 多樣性分析
+- 統計檢定與可視化 (richness, ordination, barplot)
+
+---
+
+## 📖 延伸閱讀
+- [DADA2 官方文件](https://benjjneb.github.io/dada2/index.html)
+- [MiSeq SOP 教學](https://mothur.org/wiki/miseq_sop/)
+- [phyloseq 套件](https://joey711.github.io/phyloseq/)
