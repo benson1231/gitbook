@@ -1,4 +1,4 @@
-# GitHub SSH 完整設定流程（推薦）
+# GitHub SSH 設定流程
 
 以下為最標準、最安全、最佳實務的 GitHub SSH 設定流程。設定完成後：
 
@@ -111,5 +111,3 @@ Hi USERNAME! You've successfully authenticated, but GitHub does not provide shel
 * 不用 Token
 * 更安全
 * 更簡潔
-
-若需要，我也可以幫你寫一個 **一鍵自動設定 SSH** 的 script。
