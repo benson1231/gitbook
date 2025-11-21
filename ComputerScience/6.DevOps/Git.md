@@ -162,6 +162,12 @@ git remote add origin REPO_NAME     # Add a remote repository
 git remote remove REPO_NAME         # Remove a remote repository
 ```
 
+### Change remote URL to 'ssh'
+```bash
+git remote set-url origin git@github.com:{USER}/{REPO_NAME}.git
+```
+
+
 ### Push Changes
 ```bash
 git push origin BRANCH_NAME         # Push to a remote branch
