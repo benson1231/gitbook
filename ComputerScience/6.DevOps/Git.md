@@ -20,6 +20,12 @@ git init
 ```bash
 git config --global user.name "USER_NAME"
 git config --global user.email "USER_EMAIL"
+
+git config --global pull.rebase true
+# Use rebase as the default behavior for 'git pull'
+# - Prevents divergent-branch errors
+# - Keeps commit history clean and linear
+# - Recommended for most workflows
 ```
 
 ### List Git Configurations
@@ -242,6 +248,13 @@ git clean -f
 ```bash
 git rebase BASE_BRANCH
 ```
+
+### 
+```bash
+git config --global pull.rebase true
+```
+
+
 - **Rebase**: Moves or combines commits from one branch to another to maintain a linear history.
 - **Interactive Rebase**: Allows editing, squashing, or reordering commits.
   ```bash
